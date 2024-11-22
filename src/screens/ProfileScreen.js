@@ -1,19 +1,44 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, Image } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Image, Button, Alert } from 'react-native';
+import { useNavigation, CommonActions } from '@react-navigation/native';
+import { useAuth } from '../context/AuthContext';
 
 const ProfileScreen = () => {
+  const navigation = useNavigation();
+  const { logout, user } = useAuth();
+
+  const handleLogout = () => {
+    Alert.alert(
+      "Konfirmasi Logout",
+      "Apakah Anda yakin ingin logout?",
+      [
+        { text: "Batal", style: "cancel" },
+        {
+          text: "Logout",
+          onPress: async () => {
+            await logout(); // Ini akan men-trigger re-render RootNavigator
+            // Tidak perlu navigation.dispatch karena perubahan user state 
+            // akan otomatis mengubah navigasi ke AuthStack
+          },
+        },
+      ]
+    );
+  };
+
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.title}>Profil Pengguna</Text>
       
       <View style={styles.profileInfo}>
-        {/* Gambar Profil dengan Border Lingkaran */}
         <View style={styles.profileImageContainer}>
           <Image
             source={{ uri: 'https://avatars.githubusercontent.com/u/129588334?s=400&v=4' }}
             style={styles.profileImage}
           />
         </View>
+
+        <Text style={styles.subTitle}>Username</Text>
+        <Text style={styles.text}>{user?.username || 'Pengguna'}</Text>
 
         <Text style={styles.subTitle}>Tentang Aplikasi</Text>
         <Text style={styles.text}>
@@ -24,9 +49,12 @@ const ProfileScreen = () => {
         <Text style={styles.text}>
           Aditya Lutfian Saputra.
         </Text>
+
+        <View style={styles.logoutButtonContainer}>
+          <Button title="Logout" color="#FF6347" onPress={handleLogout} />
+        </View>
       </View>
 
-      {/* Footer Copyright */}
       <View style={styles.footer}>
         <Text style={styles.footerText}>© 2024 Aditya Lutfian Saputra. All rights reserved.</Text>
       </View>
@@ -62,7 +90,7 @@ const styles = StyleSheet.create({
     width: 120,
     height: 120,
     borderRadius: 60,
-    borderWidth: 3, 
+    borderWidth: 3,
     borderColor: 'black',
     overflow: 'hidden',
     marginBottom: 20,
@@ -72,6 +100,10 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     borderRadius: 60,
+  },
+  logoutButtonContainer: {
+    marginTop: 20,
+    alignSelf: 'center',
   },
   footer: {
     borderTopWidth: 1,
