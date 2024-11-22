@@ -6,7 +6,7 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
-  // Username dan password yang di-hardcode
+  // Username dan password
   const correctUsername = 'user123';
   const correctPassword = 'password123';
 

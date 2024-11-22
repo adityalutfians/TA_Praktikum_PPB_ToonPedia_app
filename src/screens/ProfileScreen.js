@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, Image, Button, Alert } from 'react-native';
-import { useNavigation, CommonActions } from '@react-navigation/native';
+import { useNavigation} from '@react-navigation/native';
 import { useAuth } from '../context/AuthContext';
 
 const ProfileScreen = () => {
@@ -16,9 +16,7 @@ const ProfileScreen = () => {
         {
           text: "Logout",
           onPress: async () => {
-            await logout(); // Ini akan men-trigger re-render RootNavigator
-            // Tidak perlu navigation.dispatch karena perubahan user state 
-            // akan otomatis mengubah navigasi ke AuthStack
+            await logout();
           },
         },
       ]
